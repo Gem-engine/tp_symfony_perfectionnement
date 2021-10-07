@@ -10,7 +10,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('/article')]
+/**
+ *@Route("/article") 
+ */
 class ArticleController extends AbstractController
 {
     #[Route('/', name: 'article_index', methods: ['GET'])]
@@ -21,7 +23,10 @@ class ArticleController extends AbstractController
         ]);
     }
 
-    #[Route('/new', name: 'article_new', methods: ['GET','POST'])]
+    /**
+     *@Route("/new", name="article_new", methods={"GET","POST"})
+     *IsGranted("ROLE_ECRIVAIN")
+     */
     public function new(Request $request): Response
     {
         $article = new Article();
@@ -41,8 +46,9 @@ class ArticleController extends AbstractController
             'form' => $form,
         ]);
     }
-
-    #[Route('/{id}', name: 'article_show', methods: ['GET'])]
+    /**
+     *@Route("/{id}", name="article_show", methods={"GET"})
+     */
     public function show(Article $article): Response
     {
         return $this->render('article/show.html.twig', [
@@ -50,7 +56,10 @@ class ArticleController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'article_edit', methods: ['GET','POST'])]
+    /**
+     * @Route("/{id}/edit", name="article_edit", methods={"GET", "POST"})
+     * IsGranted("ROLE_ECRIVAIN")
+     */
     public function edit(Request $request, Article $article): Response
     {
         $form = $this->createForm(ArticleType::class, $article);
@@ -68,10 +77,13 @@ class ArticleController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'article_delete', methods: ['POST'])]
+    /**
+     *@Route("/{id}", name="article_delete", methods={"POST"})
+     *IsGranted("ROLE_ADMIN")
+     */
     public function delete(Request $request, Article $article): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$article->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $article->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($article);
             $entityManager->flush();
