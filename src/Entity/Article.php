@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ArticleRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -36,6 +38,22 @@ class Article
      * @ORM\Column(type="date")
      */
     private $datePublication;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Utilisateur::class, inversedBy="Ecrire")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $utilisateur;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Commentaire::class, mappedBy="article")
+     */
+    private $commenter;
+
+    public function __construct()
+    {
+        $this->commenter = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -86,6 +104,48 @@ class Article
     public function setDatePublication(\DateTimeInterface $datePublication): self
     {
         $this->datePublication = $datePublication;
+
+        return $this;
+    }
+
+    public function getUtilisateur(): ?Utilisateur
+    {
+        return $this->utilisateur;
+    }
+
+    public function setUtilisateur(?Utilisateur $utilisateur): self
+    {
+        $this->utilisateur = $utilisateur;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Commentaire[]
+     */
+    public function getCommenter(): Collection
+    {
+        return $this->commenter;
+    }
+
+    public function addCommenter(Commentaire $commenter): self
+    {
+        if (!$this->commenter->contains($commenter)) {
+            $this->commenter[] = $commenter;
+            $commenter->setArticle($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCommenter(Commentaire $commenter): self
+    {
+        if ($this->commenter->removeElement($commenter)) {
+            // set the owning side to null (unless already changed)
+            if ($commenter->getArticle() === $this) {
+                $commenter->setArticle(null);
+            }
+        }
 
         return $this;
     }
