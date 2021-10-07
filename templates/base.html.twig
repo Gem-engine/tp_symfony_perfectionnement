@@ -18,8 +18,11 @@
         <body>
             <nav>
                 <ul>
-                    <li><a href="{{path('accueil')}}">Accueil</a></li>
-                    <li><a href="{{path('cgu')}}">C.G.U</a></li>
+                    <li><a href="{{ path('accueil') }}">Accueil</a></li>
+                    <li><a href="{{ path('cgu')}}">C.G.U</a></li>
+                    <input type="hidden" name="_csrf_token"
+                    value="{{ csrf_token('authenticate') }}">
+                    <li><a href="{{ path('app_login') }}">Connection</a></li>
 
                 </ul>
             </nav>
