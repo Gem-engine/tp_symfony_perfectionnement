@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Log in!{% endblock %}
+{% block title %}{{ parent()}} Connexion{% endblock %}
 
 {% block body %}
 <form method="post">
@@ -10,19 +10,21 @@
 
     {% if app.user %}
         <div class="mb-3">
-            You are logged in as {{ app.user.username }}, <a href="{{ path('app_logout') }}">Logout</a>
+            La session de {{ app.user.username }} est ouverte, <a href="{{ path('app_logout') }}">Logout</a>
         </div>
     {% endif %}
 
     <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-    <label for="inputUsername">Username</label>
-    <input type="text" value="{{ last_username }}" name="username" id="inputUsername" class="form-control" autocomplete="username" required autofocus>
-    <label for="inputPassword">Password</label>
-    <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
+    <label for="inputUsername">Pseudo</label>
+    <input type="text" value="{{ last_username }}" name="username" id="inputUsername" class="form-control" autocomplete="username" required autofocus><br>
+    <label for="inputPassword">Mot de Passe</label>
+    <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required><br>
 
     <input type="hidden" name="_csrf_token"
            value="{{ csrf_token('authenticate') }}"
     >
+
+    
 
     {#
         Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
@@ -34,9 +36,13 @@
             </label>
         </div>
     #}
+    <div class="container">
+        <div class="row">
+            <button class="mx-5 btn btn-lg btn-primary" type="submit">Ouvrir ma session</button>
+            <a class="mx-5 btn btn-secondary" href="{{ path('app_register') }}">Créer mon compte</a>
+        </form>
+        
+        </div>
+    </div>
 
-    <button class="btn btn-lg btn-primary" type="submit">
-        Sign in
-    </button>
-</form>
 {% endblock %}
