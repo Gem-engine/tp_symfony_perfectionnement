@@ -9,7 +9,7 @@ class AccueilController extends AbstractController
 {
 
     /**
-     * @route("/accueil", name="accueil")
+     * @route("/", name="accueil")
      */
 
     public function afficherAccueil()
